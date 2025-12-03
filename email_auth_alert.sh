@@ -59,10 +59,6 @@ if ($error) {
 } else {
     log_error("Email notification sent successfully using pfSense's notification system");
 }
-
-// Also add to notification system
-notify_via_smtp($id, $subject, $message);
-file_notice($id, $subject, $message, "Security Alert");
 ?>
 EOF
 
