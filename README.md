@@ -2,6 +2,14 @@
 
 A lightweight system for monitoring authentication events on pfSense firewalls with email notifications, including SSH connections and SSHGuard blocking events.
 
+> **Note:** This is a fork of [ngfblog/pfLoginTracker](https://github.com/ngfblog/pfLoginTracker).
+>
+> **Changes in this fork:**
+> *   Removed Gotify support (email only).
+> *   Added monitoring for OpenVPN logins (success and failure).
+> *   Updated log parsing to support RFC 5424 / RFC 3339 timestamp formats (including year).
+> *   Fixed duplicate email notifications.
+
 ## Overview
 
 This project provides two shell scripts that work together to:
@@ -52,7 +60,7 @@ This project provides two shell scripts that work together to:
    chmod +x /root/Scripts/email_auth_alert.sh
    ```
 
-5. Set up a cron job to run the monitoring script periodically. Add the following to System > Cron:
+5. Install the `Cron` package via **System > Package Manager** if it is not already installed. Then set up a cron job to run the monitoring script periodically. Add the following to **Services > Cron**:
    - Command: `/root/Scripts/check_pfsense_login.sh`
    - Schedule: `*/5 * * * *` (runs every 5 minutes)
 
