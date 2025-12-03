@@ -153,7 +153,7 @@ README.md files should include:
 ### 5.3 Configuration Documentation
 - Document all configurable parameters
 - Provide examples of common customizations
-- Include information about dependent services (Gotify, SMTP)
+- Include information about dependent services (SMTP)
 
 ## 6. Code Organization
 
@@ -174,7 +174,7 @@ Maintain a consistent directory structure:
 ```
 /root/Scripts/
   ├── check_pfsense_login.sh    # Main monitoring script
-  └── gotify_auth_alert.sh      # Alert delivery script
+  └── email_auth_alert.sh       # Alert delivery script
 ```
 
 ## 7. Testing and Validation
@@ -186,7 +186,6 @@ Maintain a consistent directory structure:
 - Test with SSHGuard blocking events
 
 ### 7.2 Error Condition Testing
-- Test with unavailable Gotify server
 - Test with misconfigured email settings
 - Test with invalid log entries
 

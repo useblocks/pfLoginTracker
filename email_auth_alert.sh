@@ -1,12 +1,8 @@
 #!/bin/sh
 
 # Enhanced Alert Script for pfSense Authentication
-# Place this file at: /root/Scripts/gotify_auth_alert.sh
-# Make it executable with: chmod +x /root/Scripts/gotify_auth_alert.sh
-
-# Gotify Configuration - Replace with your server details
-GOTIFY_SERVER="http://your-gotify-server:8070"  # Your Gotify server address
-GOTIFY_TOKEN="YourGotifyApplicationToken"       # Your application token
+# Place this file at: /root/Scripts/email_auth_alert.sh
+# Make it executable with: chmod +x /root/Scripts/email_auth_alert.sh
 
 # Get authentication details from system
 USERNAME="$1"
@@ -15,68 +11,7 @@ EVENT_TYPE="$3"  # Authentication Success/Failure, SSHGuard Block/Release
 SERVICE="$4"     # Service type for SSHGuard (sshd, ftpd, etc.)
 HOSTNAME=$(hostname)
 
-# Build message
-TITLE="Security Alert from $HOSTNAME"
-
-# Customize message based on event type
-if [ "$EVENT_TYPE" = "SSHGuard Block" ]; then
-    MESSAGE="Event: $EVENT_TYPE
-Service: $SERVICE
-IP Address: $IP_ADDRESS
-Action: Blocked by SSHGuard
-Time: $(date)"
-    PRIORITY=7  # Higher priority for blocks
-
-elif [ "$EVENT_TYPE" = "SSHGuard Release" ]; then
-    MESSAGE="Event: $EVENT_TYPE
-IP Address: $IP_ADDRESS
-Action: Released from block by SSHGuard
-Time: $(date)"
-    PRIORITY=4  # Lower priority for releases
-
-else
-    # Standard auth success/failure
-    MESSAGE="Event: $EVENT_TYPE
-User: $USERNAME
-IP Address: $IP_ADDRESS
-Time: $(date)"
-    
-    # Higher priority for failures
-    if [ "$EVENT_TYPE" = "Authentication Failure" ]; then
-        PRIORITY=6
-    else
-        PRIORITY=5
-    fi
-fi
-
-# 1. Send notification to Gotify
-FULL_URL="$GOTIFY_SERVER/message?token=$GOTIFY_TOKEN"
-logger -t pfsense_auth_alert "Attempting to send to Gotify: $FULL_URL"
-
-RESPONSE=$(curl -X POST \
-  -F "title=$TITLE" \
-  -F "message=$MESSAGE" \
-  -F "priority=$PRIORITY" \
-  --write-out "%{http_code}" \
-  --silent \
-  --output /tmp/gotify_response \
-  --connect-timeout 10 \
-  "$FULL_URL")
-
-# Log the Gotify response
-if [ "$RESPONSE" -eq 200 ]; then
-    logger -t pfsense_auth_alert "Gotify notification sent successfully"
-else
-    logger -t pfsense_auth_alert "Failed to send Gotify notification. HTTP code: $RESPONSE"
-    
-    # Log more details for debugging
-    if [ -f "/tmp/gotify_response" ]; then
-        RESP_CONTENT=$(cat /tmp/gotify_response)
-        logger -t pfsense_auth_alert "Response content: $RESP_CONTENT"
-    fi
-fi
-
-# 2. Use pfSense's built-in notification system to send email
+# Use pfSense's built-in notification system to send email
 # Create a PHP script to send email via pfSense's notification system
 PHP_SCRIPT=$(mktemp)
 cat > "$PHP_SCRIPT" << 'EOF'

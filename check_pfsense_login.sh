@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# Script to check pfSense auth log and send Gotify alerts
+# Script to check pfSense auth log and send alerts
 # Place this file at: /root/Scripts/check_pfsense_login.sh
 # Make it executable with: chmod +x /root/Scripts/check_pfsense_login.sh
 
@@ -9,7 +9,7 @@ AUTH_LOG="/var/log/auth.log"
 SYSTEM_LOG="/var/log/system.log" # For sshguard logs
 LAST_CHECK_FILE="/var/tmp/last_auth_check"
 LAST_SSHGUARD_CHECK_FILE="/var/tmp/last_sshguard_check"
-ALERT_SCRIPT="/root/Scripts/gotify_auth_alert.sh"
+ALERT_SCRIPT="/root/Scripts/email_auth_alert.sh"
 
 # Create the last check files if they don't exist
 if [ ! -f "$LAST_CHECK_FILE" ]; then

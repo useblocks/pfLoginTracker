@@ -1,6 +1,6 @@
 # pfSense Authentication Monitoring System
 
-A lightweight system for monitoring authentication events on pfSense firewalls with email and Gotify notifications, including SSH connections and SSHGuard blocking events.
+A lightweight system for monitoring authentication events on pfSense firewalls with email notifications, including SSH connections and SSHGuard blocking events.
 
 ## Overview
 
@@ -10,7 +10,6 @@ This project provides two shell scripts that work together to:
 2. Track SSH connections and SSHGuard blocking activities
 3. Send notifications via:
    - Email (using pfSense's built-in notification system)
-   - [Gotify](https://gotify.net/) push notifications
 
 ## Features
 
@@ -18,7 +17,6 @@ This project provides two shell scripts that work together to:
 - Monitor SSH connections to your pfSense system
 - Receive alerts when SSHGuard blocks suspicious IP addresses
 - Send email notifications using your pfSense SMTP settings
-- Send push notifications via Gotify
 - Keep track of processed log entries to avoid duplicate notifications
 - Configurable for your environment
 
@@ -27,7 +25,6 @@ This project provides two shell scripts that work together to:
 ### Prerequisites
 
 - A pfSense firewall with shell access
-- [Gotify](https://gotify.net/) server (optional but recommended)
 - SMTP configuration set up in pfSense System > Advanced > Notifications
 
 ### Setup
@@ -43,37 +40,23 @@ This project provides two shell scripts that work together to:
    ```
    Copy the contents from the file in this repository
 
-3. Create the `gotify_auth_alert.sh` script:
+3. Create the `email_auth_alert.sh` script:
    ```
-   vi /root/Scripts/gotify_auth_alert.sh
+   vi /root/Scripts/email_auth_alert.sh
    ```
    Copy the contents from the file in this repository
 
 4. Make both scripts executable:
    ```
    chmod +x /root/Scripts/check_pfsense_login.sh
-   chmod +x /root/Scripts/gotify_auth_alert.sh
+   chmod +x /root/Scripts/email_auth_alert.sh
    ```
 
-5. Edit the `gotify_auth_alert.sh` script to update:
-   - Your Gotify server address
-   - Your Gotify application token
-
-6. Set up a cron job to run the monitoring script periodically. Add the following to System > Cron:
+5. Set up a cron job to run the monitoring script periodically. Add the following to System > Cron:
    - Command: `/root/Scripts/check_pfsense_login.sh`
    - Schedule: `*/5 * * * *` (runs every 5 minutes)
 
 ## Configuration
-
-### Gotify Configuration
-
-In `gotify_auth_alert.sh`, update these variables:
-
-```sh
-# Gotify Configuration
-GOTIFY_SERVER="http://your-gotify-server:8070"  # Your Gotify server address
-GOTIFY_TOKEN="YourGotifyApplicationToken"       # Your application token
-```
 
 ### Email Configuration
 
@@ -89,8 +72,8 @@ System > Advanced > Notifications > E-Mail
    - SSH connection attempts
    - SSHGuard blocking actions
 3. When it finds an event, it extracts the relevant information (username, IP address)
-4. It calls `gotify_auth_alert.sh` with these details
-5. `gotify_auth_alert.sh` sends notifications to both Gotify and email
+4. It calls `email_auth_alert.sh` with these details
+5. `email_auth_alert.sh` sends notifications to email
 
 ## Alert Types
 

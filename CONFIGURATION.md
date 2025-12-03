@@ -4,26 +4,6 @@ This document explains how to customize and extend the pfSense Authentication Mo
 
 ## Basic Configuration
 
-### Gotify Settings
-
-In `gotify_auth_alert.sh`, you can customize the Gotify notification:
-
-```bash
-# Gotify Configuration
-GOTIFY_SERVER="http://your-gotify-server:8070"  # Your Gotify server address
-GOTIFY_TOKEN="YourGotifyApplicationToken"       # Your application token
-```
-
-You can also adjust the notification priority (default is 5, which represents high priority):
-
-```bash
-RESPONSE=$(curl -X POST \
-  -F "title=$TITLE" \
-  -F "message=$MESSAGE" \
-  -F "priority=5" \  # Change this value (1-10)
-  # ...rest of the command
-```
-
 ### Notification Frequency
 
 By default, the cron job is set to run every 5 minutes. You can adjust this by changing the cron schedule:
@@ -36,7 +16,7 @@ By default, the cron job is set to run every 5 minutes. You can adjust this by c
 
 ### Adding GeoIP Information to Alerts
 
-You can enhance the alerts with geographic information about the IP address by installing the GeoIP package and modifying the script. Add this to the `gotify_auth_alert.sh` script:
+You can enhance the alerts with geographic information about the IP address by installing the GeoIP package and modifying the script. Add this to the `email_auth_alert.sh` script:
 
 ```bash
 # Check if geoiplookup is available
@@ -84,7 +64,7 @@ fi
 
 ### Adding Multiple Notification Channels
 
-You can extend the script to notify through additional channels like Telegram, Slack, or Discord by adding similar notification blocks in `gotify_auth_alert.sh`:
+You can extend the script to notify through additional channels like Telegram, Slack, or Discord by adding similar notification blocks in `email_auth_alert.sh`:
 
 ```bash
 # Example for Telegram notifications
