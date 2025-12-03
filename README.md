@@ -33,7 +33,9 @@ This project provides two shell scripts that work together to:
 ### Prerequisites
 
 - A pfSense firewall with shell access
-- SMTP configuration set up in pfSense System > Advanced > Notifications
+- SMTP configuration set up in pfSense **System > Advanced > Notifications**
+- Log Message Format set to **syslog (RFC 5424, with RFC 3339 microsecond-precision timestamps)** in **Status > System Logs > Settings**.
+  > **Important:** After changing this setting, you must click the **Reset Log Files** button on the same page for the changes to take effect.
 
 ### Setup
 
