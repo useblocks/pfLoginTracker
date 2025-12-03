@@ -29,7 +29,7 @@ CURRENT_TIME=$(date +%s)
 touch "$LAST_CHECK_FILE"
 touch "$LAST_SSHGUARD_CHECK_FILE"
 
-# Look for successful logins
+# Look for successful logins to WebGUI
 grep -a "Successful login" "$AUTH_LOG" | while read -r line; do
     # Extract timestamp from log line
     LOG_DATE=$(echo "$line" | awk '{print $1,$2,$3}')
@@ -63,6 +63,44 @@ grep -a "authentication error" "$AUTH_LOG" | while read -r line; do
         # Send alert
         if [ -n "$USERNAME" ] && [ -n "$IP_ADDRESS" ]; then
             "$ALERT_SCRIPT" "$USERNAME" "$IP_ADDRESS" "Authentication Failure"
+        fi
+    fi
+done
+
+# Look for OpenVPN successful logins
+grep -a "openvpn.*user '.*' authenticated" "$AUTH_LOG" | grep -v "could not" | while read -r line; do
+    # Extract timestamp from log line
+    LOG_DATE=$(echo "$line" | awk '{print $1,$2,$3}')
+    LOG_TIME=$(date -j -f "%b %d %H:%M:%S" "$LOG_DATE" +%s 2>/dev/null)
+    
+    # Process only new entries
+    if [ "$LOG_TIME" -ge "$LAST_CHECK" ]; then
+        # Extract username
+        USERNAME=$(echo "$line" | grep -o "user '[^']*'" | sed "s/user '//;s/'//")
+        IP_ADDRESS="OpenVPN Client"
+        
+        # Send alert
+        if [ -n "$USERNAME" ]; then
+            "$ALERT_SCRIPT" "$USERNAME" "$IP_ADDRESS" "OpenVPN Success"
+        fi
+    fi
+done
+
+# Look for OpenVPN failed logins
+grep -a "openvpn.*user '.*' could not authenticate" "$AUTH_LOG" | while read -r line; do
+    # Extract timestamp from log line
+    LOG_DATE=$(echo "$line" | awk '{print $1,$2,$3}')
+    LOG_TIME=$(date -j -f "%b %d %H:%M:%S" "$LOG_DATE" +%s 2>/dev/null)
+    
+    # Process only new entries
+    if [ "$LOG_TIME" -ge "$LAST_CHECK" ]; then
+        # Extract username
+        USERNAME=$(echo "$line" | grep -o "user '[^']*'" | sed "s/user '//;s/'//")
+        IP_ADDRESS="OpenVPN Client"
+        
+        # Send alert
+        if [ -n "$USERNAME" ]; then
+            "$ALERT_SCRIPT" "$USERNAME" "$IP_ADDRESS" "OpenVPN Failure"
         fi
     fi
 done
