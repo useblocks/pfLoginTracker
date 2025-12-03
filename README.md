@@ -37,6 +37,8 @@ This project provides two shell scripts that work together to:
 
 ### Setup
 
+> **Tip:** You can execute the shell commands listed below either via SSH or by using the **Diagnostics > Command Prompt** feature in the pfSense WebGUI.
+
 1. Create a directory for the scripts:
    ```
    mkdir -p /root/Scripts
@@ -100,6 +102,14 @@ You can customize the scripts to:
 - Add geo-location information for IP addresses
 - Filter out specific users or IP addresses
 - Adjust the notification format
+
+## Testing
+
+You can manually test the alert script to verify that email notifications are working correctly. Run the following command via SSH or in **Diagnostics > Command Prompt**:
+
+```bash
+/root/Scripts/email_auth_alert.sh "testuser" "127.0.0.1" "Test Event" "Test Service"
+```
 
 ## Troubleshooting
 
