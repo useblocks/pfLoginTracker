@@ -31,9 +31,10 @@ touch "$LAST_SSHGUARD_CHECK_FILE"
 
 # Look for successful logins to WebGUI
 grep -a "Successful login" "$AUTH_LOG" | while read -r line; do
-    # Extract timestamp from log line
-    LOG_DATE=$(echo "$line" | awk '{print $1,$2,$3}')
-    LOG_TIME=$(date -j -f "%b %d %H:%M:%S" "$LOG_DATE" +%s 2>/dev/null)
+    # Extract timestamp from log line (RFC 3339)
+    LOG_DATE=$(echo "$line" | awk '{print $2}')
+    CLEAN_DATE=$(echo "$LOG_DATE" | cut -c 1-19)
+    LOG_TIME=$(date -j -f "%Y-%m-%dT%H:%M:%S" "$CLEAN_DATE" +%s 2>/dev/null)
     
     # Process only new entries
     if [ "$LOG_TIME" -ge "$LAST_CHECK" ]; then
@@ -50,9 +51,10 @@ done
 
 # Look for failed logins
 grep -a "authentication error" "$AUTH_LOG" | while read -r line; do
-    # Extract timestamp from log line
-    LOG_DATE=$(echo "$line" | awk '{print $1,$2,$3}')
-    LOG_TIME=$(date -j -f "%b %d %H:%M:%S" "$LOG_DATE" +%s 2>/dev/null)
+    # Extract timestamp from log line (RFC 3339)
+    LOG_DATE=$(echo "$line" | awk '{print $2}')
+    CLEAN_DATE=$(echo "$LOG_DATE" | cut -c 1-19)
+    LOG_TIME=$(date -j -f "%Y-%m-%dT%H:%M:%S" "$CLEAN_DATE" +%s 2>/dev/null)
     
     # Process only new entries
     if [ "$LOG_TIME" -ge "$LAST_CHECK" ]; then
@@ -69,9 +71,10 @@ done
 
 # Look for OpenVPN successful logins
 grep -a "openvpn.*user '.*' authenticated" "$AUTH_LOG" | grep -v "could not" | while read -r line; do
-    # Extract timestamp from log line
-    LOG_DATE=$(echo "$line" | awk '{print $1,$2,$3}')
-    LOG_TIME=$(date -j -f "%b %d %H:%M:%S" "$LOG_DATE" +%s 2>/dev/null)
+    # Extract timestamp from log line (RFC 3339)
+    LOG_DATE=$(echo "$line" | awk '{print $2}')
+    CLEAN_DATE=$(echo "$LOG_DATE" | cut -c 1-19)
+    LOG_TIME=$(date -j -f "%Y-%m-%dT%H:%M:%S" "$CLEAN_DATE" +%s 2>/dev/null)
     
     # Process only new entries
     if [ "$LOG_TIME" -ge "$LAST_CHECK" ]; then
@@ -88,9 +91,10 @@ done
 
 # Look for OpenVPN failed logins
 grep -a "openvpn.*user '.*' could not authenticate" "$AUTH_LOG" | while read -r line; do
-    # Extract timestamp from log line
-    LOG_DATE=$(echo "$line" | awk '{print $1,$2,$3}')
-    LOG_TIME=$(date -j -f "%b %d %H:%M:%S" "$LOG_DATE" +%s 2>/dev/null)
+    # Extract timestamp from log line (RFC 3339)
+    LOG_DATE=$(echo "$line" | awk '{print $2}')
+    CLEAN_DATE=$(echo "$LOG_DATE" | cut -c 1-19)
+    LOG_TIME=$(date -j -f "%Y-%m-%dT%H:%M:%S" "$CLEAN_DATE" +%s 2>/dev/null)
     
     # Process only new entries
     if [ "$LOG_TIME" -ge "$LAST_CHECK" ]; then
@@ -107,9 +111,10 @@ done
 
 # Look for sshguard blocked IPs
 grep -a "sshguard.*Blocking" "$SYSTEM_LOG" | while read -r line; do
-    # Extract timestamp from log line
-    LOG_DATE=$(echo "$line" | awk '{print $1,$2,$3}')
-    LOG_TIME=$(date -j -f "%b %d %H:%M:%S" "$LOG_DATE" +%s 2>/dev/null)
+    # Extract timestamp from log line (RFC 3339)
+    LOG_DATE=$(echo "$line" | awk '{print $2}')
+    CLEAN_DATE=$(echo "$LOG_DATE" | cut -c 1-19)
+    LOG_TIME=$(date -j -f "%Y-%m-%dT%H:%M:%S" "$CLEAN_DATE" +%s 2>/dev/null)
     
     # Process only new entries
     if [ "$LOG_TIME" -ge "$LAST_SSHGUARD_CHECK" ]; then
@@ -139,9 +144,10 @@ done
 
 # Look for sshguard released IPs
 grep -a "sshguard.*Releasing" "$SYSTEM_LOG" | while read -r line; do
-    # Extract timestamp from log line
-    LOG_DATE=$(echo "$line" | awk '{print $1,$2,$3}')
-    LOG_TIME=$(date -j -f "%b %d %H:%M:%S" "$LOG_DATE" +%s 2>/dev/null)
+    # Extract timestamp from log line (RFC 3339)
+    LOG_DATE=$(echo "$line" | awk '{print $2}')
+    CLEAN_DATE=$(echo "$LOG_DATE" | cut -c 1-19)
+    LOG_TIME=$(date -j -f "%Y-%m-%dT%H:%M:%S" "$CLEAN_DATE" +%s 2>/dev/null)
     
     # Process only new entries
     if [ "$LOG_TIME" -ge "$LAST_SSHGUARD_CHECK" ]; then
