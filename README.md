@@ -46,26 +46,37 @@ This project provides two shell scripts that work together to:
    mkdir -p /root/Scripts
    ```
 
-2. Create the `check_pfsense_login.sh` script:
+2. Install the scripts using one of the following methods:
+
+   **Option A: Automatic Download (Recommended for Command Prompt)**
+   ```
+   fetch https://raw.githubusercontent.com/useblocks/pfLoginTracker/refs/heads/main/check_pfsense_login.sh -o /root/Scripts/check_pfsense_login.sh
+   fetch https://raw.githubusercontent.com/useblocks/pfLoginTracker/refs/heads/main/email_auth_alert.sh -o /root/Scripts/email_auth_alert.sh
+   ```
+
+   **Option B: Manual Creation (via SSH)**
+   
+   Create `check_pfsense_login.sh`:
    ```
    vi /root/Scripts/check_pfsense_login.sh
    ```
-   Copy the contents from the file in this repository
+   (Copy contents from `check_pfsense_login.sh` in this repository)
 
-3. Create the `email_auth_alert.sh` script:
+   Create `email_auth_alert.sh`:
    ```
    vi /root/Scripts/email_auth_alert.sh
    ```
-   Copy the contents from the file in this repository
+   (Copy contents from `email_auth_alert.sh` in this repository)
 
-4. Make both scripts executable:
+3. Make both scripts executable:
    ```
    chmod +x /root/Scripts/check_pfsense_login.sh
    chmod +x /root/Scripts/email_auth_alert.sh
    ```
 
-5. Install the `Cron` package via **System > Package Manager** if it is not already installed. Then set up a cron job to run the monitoring script periodically. Add the following to **Services > Cron**:
+4. Install the `Cron` package via **System > Package Manager** if it is not already installed. Then set up a cron job to run the monitoring script periodically. Add the following to **Services > Cron**:
    - Command: `/root/Scripts/check_pfsense_login.sh`
+   - User: `root`
    - Schedule: `*/5 * * * *` (runs every 5 minutes)
 
 ## Configuration
